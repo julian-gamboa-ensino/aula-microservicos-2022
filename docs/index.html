@@ -1,223 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novembro 08</title>
+<html lang="en"><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
-
-body {
-  margin: 0;
-  font-size: 14px;
-  background-color: #9cdee0;
-}
-body p{
-  margin: 0;
-  padding: 0;
-}
-body *{
-  outline: none;
-}
-.game-container {
-  position: relative;
-  width: 100%;
-  background-color: #9cdee0;  
-  color: #FFF;
-  font-family: sans-serif;
-  text-align: center;
-}
-
-.instructions{
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  font-size: 1.571em;
-  padding-top: 30px;
-}
-
-.shell-game{
-  position: relative;
-  width: 99%;
-  height: 450px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-}
-
-.cups-box{
-  position: absolute;
-  width: 788px;
-  height: 100%;
-  margin: auto;
-  left: 0; right: 0;
-}
-
-.cup{
-  position: absolute;
-  width: 196px;
-  height: 286px;
-  background-image: url(https://redcactus725.000webhostapp.com/assets/images/shellGame/cup.png);
-  background-repeat: no-repeat;
-  top: 50px;
-}
-.cup-2{
-  left: 296px;
-}
-.cup-3{
-  left: 592px;
-}
-
-#ball{
-  position: absolute;
-  width: 155px;
-  height: 103px;
-  background-image: url(https://redcactus725.000webhostapp.com/assets/images/shellGame/ball.png);
-  background-repeat: no-repeat;
-  left: 146px;
-  top: 256px;
-}
-
-#btnStart{
-  cursor: pointer;
-  height: 40px;
-  width: 90%;
-  max-width: 250px;
-  border: 0;
-  background-color: #151f75;
-  font-size: 1.571em;
-  line-height: 1.8em;
-  font-family: 'Lato', sans-serif;
-  font-weight: 700;
-  color: #FFF;  
-  -webkit-border-radius: 7px;
-  border-radius: 7px;
-  margin-bottom: 50px;
-}
-
-
-</style>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
-
-<script>  
-
-$(function(){
-
-var intMoves = 5; // number of moves
-var speed = 0.5; // initial speed of moves - increase each moves
-var maxSpeed = 0.2; // maximum speed of moves
-
-var objMovePattern = []; // object contain a pattern for the cup shifting
-var ball = $('#ball');
-var widthBall = (ball.width()/2)-40;
-var firstCup;
-
-(function init() {
-    objMovePattern = generateMovePatterns();
-    $('#btnStart').on('click', startGame);
-//console.log("objMovePattern");
-})();
-
-function startGame(event) {
-    $(event.currentTarget).remove();
-    firstCup = Math.round(Math.random()*2+1);
-    var cup = $('.cup-'+firstCup);
-    TweenMax.to(cup, 0.5,{y:-130});
-    TweenMax.to(ball, 0.5,{left: cup.position().left+widthBall, y:-30, onComplete:function(){
-        ball.css('z-index', '1');
-        $('.cup').css('z-index', '10');
-        TweenMax.to(cup, 0.5,{y:0, onComplete:shakeCups});
-    }});
-}
-
-function shakeCups() {
-    ball.css('display', 'none');
-    var aPos = [$('.cup-'+objMovePattern[0][0]).position().left, $('.cup-'+objMovePattern[0][1]).position().left, $('.cup-'+objMovePattern[0][2]).position().left];
-    for(var i = 0; i < objMovePattern.length; i++){
-        speed = (speed > maxSpeed) ? speed/1.1 : maxSpeed;
-        TweenMax.to($('.cup-'+objMovePattern[i][0]), speed,{left: aPos[0], delay:speed*i, ease:Sine.easeOut});
-        TweenMax.to($('.cup-'+objMovePattern[i][1]), speed,{left: aPos[1], delay:speed*i, ease:Sine.easeOut});
-        if(i == (objMovePattern.length-1)) TweenMax.to($('.cup-'+objMovePattern[i][2]), speed,{left: aPos[2], delay:speed*i, ease:Sine.easeOut, onComplete: unableCupClick});
-        else TweenMax.to($('.cup-'+objMovePattern[i][2]), speed,{left: aPos[2], delay:speed*i, ease:Sine.easeOut});
+    details > summary {
+      padding: 4px;
+      width: 200px;
+      background-color: #eeeeee;
+      border: none;
+      box-shadow: 1px 1px 2px #bbbbbb;
+      cursor: pointer;
     }
-}
-
-function unableCupClick() {
-    $('.cup').css('cursor', 'pointer');
-    $('.cup').on('click', clickCup);
-}
-
-function clickCup(event) {
-    var currentCup = $(event.currentTarget);
-    currentCup.off('click');
-    currentCup.css('cursor', 'default');
-    var iCup = currentCup.attr('id').split('cup')[1];
-    ball.css({'left':$('.cup-'+firstCup).position().left+widthBall, 'display':'block'});
-    TweenMax.to($('.cup-'+iCup), 0.5,{y: -130, ease:Sine.easeIn, delay:0.1});
-}
-
-// Tool functions
-
-function generateMovePatterns() {
-    var objMoves = [[1,2,3]]; // initial state, cups order
-    var aMoves = [1,2,3];
-
-    for(var i = 0; i < intMoves; i++){
-        var initialPattern = [1,2,3];
-        var objShuffledPattern = shuffle(initialPattern);
-        while(objShuffledPattern[0] == objMoves[i][0]){
-            objShuffledPattern = shuffle(initialPattern);
-        }
-        objMoves.push(objShuffledPattern);
+    
+    details > p {
+      background-color: #11cc84;
+      padding: 4px;
+      margin: 0;
     }
+    </style>
 
-    return objMoves;
-}
+<title>2022-7-1-6-43-50</title></head>
 
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+<body style="background-color: brown;">
 
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
 
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+<h1>Etiquetas:</h1>
 
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+<select name="cars" id="etiquetas" onchange="EtiquetasSelect()"><option value="0" selected="selected">aws</option><option value="1">instagram</option><option value="2">venezuela</option><option value="3">politica</option><option value="4">porno</option><option value="5">juridico</option><option value="6">english</option><option value="7">vagas</option><option value="8">big-data</option><option value="9">chess</option><option value="10">html</option><option value="11">oracle</option><option value="12">sabado</option><option value="13">java</option><option value="14">noite</option><option value="15">papa</option></select>
 
-    return array;
-}
 
-});
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
+<details  contenteditable="true">	<summary></summary>  <p><br></p>
+</details>
 
+
+<details open="" contenteditable="true">
+  <summary>Certificações <br></summary>
+  <p><br></p>
+</details>
+
+
+
+<script>
+
+	const ano=new Date().getFullYear();
+    var mes=new Date().getMonth();
+	mes++;
+    const dia=new Date().getDate();
+    const hora=new Date().getHours();
+    const minuto=new Date().getMinutes();
+    const segundo=new Date().getSeconds();
+    document.title =ano+"-"+mes+"-"+dia+"-"+hora+"-"+minuto+"-"+segundo;
+
+
+	var previa = [
+		{nombre:"" , color:""},		
+		{nombre:"" , color:""},		
+	];	
+
+	var etiquetas = [
+		{nombre:"aws" , color:"yellow"},
+		{nombre:"instagram" , color:"pink"},	
+		{nombre:"venezuela" , color:"orange"},
+		{nombre:"politica" , color:"lightblue"},
+		{nombre:"porno" , color:"red"},		
+		{nombre:"juridico" , color:"brown"},		
+		{nombre:"english" , color:"green"},				
+		{nombre:"vagas" , color:"white"},		
+		{nombre:"big-data" , color: "#CD5C5C"},	
+		{nombre:"chess" , color:"#AA5C5C"},		
+		{nombre:"html" , color:"#AAAC5A"},		
+		{nombre:"oracle" , color:"#AAAC5A"},		
+		{nombre:"sabado" , color:"#AAAC9A"},		
+		{nombre:"java" , color:"#CCCA9A"},		
+		{nombre:"noite" , color:""},		
+		{nombre:"papa" , color:""},		
+	];	
+
+	/*
+	
+
+	{nombre:"" , color:""},		
+
+	{nombre:"" , color:""},		
+
+	{nombre:"" , color:""},		
+
+{nombre:"" , color:""},		
+
+{nombre:"" , color:""},		
+	*/
+
+
+	var selectList = document.getElementById("etiquetas");
+	selectList.innerHTML = "";
+	
+	
+	for (var i = 0; i < etiquetas.length; i++) {
+		var option = document.createElement("option");
+		option.value = i;
+		option.text = etiquetas[i].nombre;
+		selectList.appendChild(option);
+	}
+
+
+	function EtiquetasSelect() {
+  		var x = document.getElementById("etiquetas").value;
+  		document.title ="ssd"+previa[0].nombre+"-"+etiquetas[x].nombre+"-"+ano+"-"+mes+"-"+dia+"-"+hora+"-"+minuto+"-"+segundo;
+  		document.body.style.backgroundColor = etiquetas[x].color;
+        
+	}
 </script>
 
-</head>
-<body>
-    <div class="game-container">
-        <p class="instructions">
-          Find the ball
-        </p>
-        <div class="shell-game">
-          <div class="cups-box">
-            <div id="cup1" class="cup cup-1"></div>
-            <div id="cup2" class="cup cup-2"></div>
-            <div id="cup3" class="cup cup-3"></div>
-            <div id="ball"></div>
-          </div>
-        </div>
-        <button id="btnStart">START</button>
-      </div>
+
 </body>
 </html>
-
