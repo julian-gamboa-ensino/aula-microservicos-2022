@@ -12,4 +12,14 @@ Neste pequeno curso sobre Microseviços, vamos ver:
       B-->D;
       C-->D;
 ```
+Exemplo
+
+```mermaid
+flowchart LR
+
+A[Hard] -->|Text| B(Round)
+B --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+```
 
