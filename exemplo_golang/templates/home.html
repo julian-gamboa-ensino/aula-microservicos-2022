@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple CRUD App</title>
+</head>
+<body>
+    <h1>Items</h1>
+    <ul>
+        {{range .}}
+        <li>{{.}}</li>
+        {{end}}
+    </ul>
+    <form action="/create" method="post">
+        <input type="text" name="item" placeholder="Add new item">
+        <button type="submit">Add</button>
+    </form>
+    <!-- Similar forms for update and delete -->
+</body>
+</html>

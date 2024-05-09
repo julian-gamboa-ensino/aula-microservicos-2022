@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=username
+      - DB_PASS=password
+      - DB_NAME=dbname
+      - DB_PORT=5432
+
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbname
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com  # Use seu e-mail para login
+      PGADMIN_DEFAULT_PASSWORD: admin           # Defina uma senha segura
+    ports:
+      - "5050:80"  # Porta acessível localmente em http://localhost:5050
+    depends_on:
+      - db
+
+
+volumes:
+  postgres_data:
