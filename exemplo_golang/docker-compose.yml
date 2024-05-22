@@ -30,6 +30,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com  # Use seu e-mail para login
       PGADMIN_DEFAULT_PASSWORD: admin           # Defina uma senha segura
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: 'False'
     ports:
       - "5050:80"  # Porta acessível localmente em http://localhost:5050
     depends_on:
