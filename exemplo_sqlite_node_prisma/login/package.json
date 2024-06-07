@@ -1,0 +1,21 @@
+{
+    "name": "login-service",
+    "version": "1.0.0",
+    "description": "Login microservice",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@prisma/client": "^5.15.0",
+      "body-parser": "^1.20.2",
+      "cors": "^2.8.5",
+      "express": "^4.19.2"
+    },
+    "devDependencies": {
+      "prisma": "^5.15.0"
+    }
+  }
+  
