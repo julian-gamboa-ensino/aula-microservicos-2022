@@ -1,0 +1,19 @@
+2024/07/03 23:36:36 Imagem de https://example.com/image2.jpg baixada com sucesso
+2024/07/03 23:36:36 Imagem de https://example.com/image1.jpg baixada com sucesso
+2024/07/03 23:36:36 Todas as imagens foram baixadas e processadas com sucesso!
+2024/07/03 23:37:50 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/F9EA66D0.jpg baixada com sucesso
+2024/07/03 23:37:50 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/EE3EC6C2.jpg baixada com sucesso
+2024/07/03 23:37:50 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/E02D0099.jpg baixada com sucesso
+2024/07/03 23:37:50 Todas as imagens foram baixadas e processadas com sucesso!
+2024/07/04 00:03:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/F9EA66D0.jpg baixada com sucesso
+2024/07/04 00:03:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/EE3EC6C2.jpg baixada com sucesso
+2024/07/04 00:03:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/E02D0099.jpg baixada com sucesso
+2024/07/04 00:03:51 Todas as imagens foram baixadas e processadas com sucesso!
+2024/07/04 00:04:14 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/EE3EC6C2.jpg baixada com sucesso
+2024/07/04 00:04:14 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/E02D0099.jpg baixada com sucesso
+2024/07/04 00:04:14 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/F9EA66D0.jpg baixada com sucesso
+2024/07/04 00:04:14 Todas as imagens foram baixadas e processadas com sucesso!
+2024/07/04 00:04:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/E02D0099.jpg baixada com sucesso
+2024/07/04 00:04:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/F9EA66D0.jpg baixada com sucesso
+2024/07/04 00:04:51 Imagem de https://cv-julian-2022.s3.us-west-2.amazonaws.com/certificados/EE3EC6C2.jpg baixada com sucesso
+2024/07/04 00:04:51 Todas as imagens foram baixadas e processadas com sucesso!
