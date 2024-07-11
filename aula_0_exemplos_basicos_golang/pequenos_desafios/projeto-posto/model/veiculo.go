@@ -1,4 +1,4 @@
-package models
+package model
 
 type Veiculo struct {
 	Modelo string

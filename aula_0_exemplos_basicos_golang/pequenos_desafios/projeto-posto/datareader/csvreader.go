@@ -4,7 +4,8 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
-	"projeto-posto/models"
+	"projeto-posto/model"
+
 	"strconv"
 	"strings"
 )
@@ -14,7 +15,7 @@ type CSVReader struct {
 	ModelosFile  string
 }
 
-func (r *CSVReader) ReadVeiculos() ([]models.Veiculo, error) {
+func (r *CSVReader) ReadVeiculos() ([]model.Veiculo, error) {
 	file, err := os.Open(r.VeiculosFile)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao abrir o arquivo %s: %v", r.VeiculosFile, err)
@@ -28,9 +29,9 @@ func (r *CSVReader) ReadVeiculos() ([]models.Veiculo, error) {
 		return nil, fmt.Errorf("erro ao ler o arquivo %s: %v", r.VeiculosFile, err)
 	}
 
-	var veiculos []models.Veiculo
+	var veiculos []model.Veiculo
 	for _, record := range records[1:] {
-		veiculo := models.Veiculo{
+		veiculo := model.Veiculo{
 			Modelo: record[0],
 			Placa:  record[1],
 		}
@@ -39,7 +40,7 @@ func (r *CSVReader) ReadVeiculos() ([]models.Veiculo, error) {
 	return veiculos, nil
 }
 
-func (r *CSVReader) ReadModelos() (map[string]models.Modelo, error) {
+func (r *CSVReader) ReadModelos() (map[string]model.Modelo, error) {
 	file, err := os.Open(r.ModelosFile)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao abrir o arquivo %s: %v", r.ModelosFile, err)
@@ -53,7 +54,7 @@ func (r *CSVReader) ReadModelos() (map[string]models.Modelo, error) {
 		return nil, fmt.Errorf("erro ao ler o arquivo %s: %v", r.ModelosFile, err)
 	}
 
-	modelos := make(map[string]models.Modelo)
+	modelos := make(map[string]model.Modelo)
 	for i, record := range records[1:] {
 		if len(record) < 4 {
 			return nil, fmt.Errorf("linha %d do arquivo %s tem formato inválido", i+2, r.ModelosFile)
@@ -86,7 +87,7 @@ func (r *CSVReader) ReadModelos() (map[string]models.Modelo, error) {
 		tempoCarregamentoEtanol := capacidadeTanque / vazamentoBombaEtanol
 		tempoCarregamentoGasolina := capacidadeTanque / vazamentoBombaGasolina
 
-		modelos[nome] = models.Modelo{
+		modelos[nome] = model.Modelo{
 			Nome:                      nome,
 			ConsumoEtanol:             consumoEtanol,
 			ConsumoGasolina:           consumoGasolina,

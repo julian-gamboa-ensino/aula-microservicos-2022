@@ -1,9 +1,9 @@
 package datareader
 
-import "projeto-posto/models"
+import "projeto-posto/model"
 
 // DataReader é uma interface para leitura de dados.
 type DataReader interface {
-    ReadVeiculos() ([]models.Veiculo, error)
-    ReadModelos() (map[string]models.Modelo, error)
+	ReadVeiculos() ([]model.Veiculo, error)
+	ReadModelos() (map[string]model.Modelo, error)
 }

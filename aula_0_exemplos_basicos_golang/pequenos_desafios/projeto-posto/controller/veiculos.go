@@ -1,11 +1,11 @@
-package controllers
+package controller
 
 import (
 	"projeto-posto/datareader"
-	"projeto-posto/models"
+	"projeto-posto/model"
 )
 
-func EstudarVeiculos(dr datareader.DataReader) ([]models.Veiculo, error) {
+func EstudarVeiculos(dr datareader.DataReader) ([]model.Veiculo, error) {
 	veiculos, err := dr.ReadVeiculos()
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package models
+package model
 
 type Modelo struct {
 	Nome                      string

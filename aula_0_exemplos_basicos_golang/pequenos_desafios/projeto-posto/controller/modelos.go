@@ -1,11 +1,11 @@
-package controllers
+package controller
 
 import (
 	"projeto-posto/datareader"
-	"projeto-posto/models"
+	"projeto-posto/model"
 )
 
-func EstudarModelos(dr datareader.DataReader) (map[string]models.Modelo, error) {
+func EstudarModelos(dr datareader.DataReader) (map[string]model.Modelo, error) {
 	modelos, err := dr.ReadModelos()
 	if err != nil {
 		return nil, err
