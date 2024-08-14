@@ -1,0 +1,166 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template para criar uma EC2 Spot com Docker em uma VPC (Ubuntu), sem Elastic IP.
+
+Resources:
+  # Cria uma nova VPC com suporte a DNS
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16 
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: My VPC
+
+  # Cria uma subnet pública dentro da VPC, em uma zona de disponibilidade específica
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: 10.0.0.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      MapPublicIpOnLaunch: true  # Atribui automaticamente um IP público às instâncias na subnet
+      Tags:
+        - Key: Name
+          Value: Public Subnet
+
+  # Cria um Internet Gateway para permitir que a VPC tenha acesso à internet
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: My Internet Gateway
+
+  # Anexa o Internet Gateway à VPC criada
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Cria uma tabela de rotas para a VPC que direciona o tráfego da subnet para o Internet Gateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: Name
+          Value: Public Route Table
+
+  # Adiciona uma rota para a tabela de rotas, permitindo acesso à internet para a subnet
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  # Associa a tabela de rotas pública à subnet pública
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  # Cria um Security Group que permite acesso via SSH (porta 22) e para uma aplicação na porta 8080
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Permitir acesso para app e banco de dados
+      VpcId: !Ref MyVPC 
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+
+  # Cria uma Role IAM com uma política inline para permitir o uso de Spot Fleet
+  MyIAMRole:
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: 
+                - "spotfleet.amazonaws.com"  # Use o serviço correto para Spot Fleet
+            Action: 
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "SpotFleetPermissions"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ec2:RequestSpotFleet"
+                  - "ec2:DescribeSpotFleetInstances"
+                  - "ec2:DescribeSpotFleetRequests"
+                  - "ec2:CancelSpotFleetRequests"
+                  - "ec2:DescribeInstances"
+                  - "ec2:TerminateInstances"
+                  - "ec2:DescribeImages"
+                  - "ec2:DescribeSubnets" 
+                Resource: "*"
+
+  # Cria uma instância EC2 Spot utilizando a AMI do Ubuntu e configurações do Docker
+  AppInstance:
+    Type: AWS::EC2::SpotFleet
+    DependsOn: 
+      - MyVPC
+      - PublicSubnet
+      - InternetGateway
+      - AttachGateway
+      - PublicRouteTable
+      - PublicRoute
+      - SubnetRouteTableAssociation
+      - MySecurityGroup
+      - MyIAMRole
+    Properties:
+      SpotFleetRequestConfigData:
+        IamFleetRole: !GetAtt MyIAMRole.Arn
+        TargetCapacity: 1 
+        LaunchSpecifications:
+          - ImageId: ami-08e2c1a8d17c2fe17
+            InstanceType: t2.micro
+            #KeyName: !Ref KeyName
+            SecurityGroups:
+              - GroupId: !Ref MySecurityGroup
+            SpotPrice: "0.02"
+            SubnetId: !Ref PublicSubnet 
+            UserData:
+              Fn::Base64: 
+                !Sub |
+                  #!/bin/bash
+                  sudo apt update 
+                  sudo apt upgrade -y
+                  sudo apt -y install software-properties-common
+                  sudo add-apt-repository ppa:ondrej/php -y
+                  sudo apt install php8.2 -y
+
+                  sudo apt install -y docker.io
+                  sudo systemctl start docker
+                  sudo systemctl enable docker  # Habilita o Docker para iniciar na inicialização
+                  sudo usermod -aG docker ubuntu
+
+                  curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  chmod +x /usr/local/bin/docker-compose
+
+                  mkdir /home/ubuntu/app
+                  cd /home/ubuntu/app
+                  touch agosto14.txt  # Cria um arquivo para verificar se o script foi executado
+
+  # Cria um Elastic IP
+  ElasticIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
