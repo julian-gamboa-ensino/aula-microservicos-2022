@@ -1,28 +1,13 @@
 package main
 
 import (
+	"agosto-24/circle"
+	"agosto-24/square"
 	"fmt"
-	"math"
 )
 
 type Shape interface {
 	Area() float64
-}
-
-type Square struct {
-	side float64
-}
-
-func (sq Square) Area() float64 {
-	return sq.side * sq.side
-}
-
-type Circle struct {
-	radius float64
-}
-
-func (c Circle) Area() float64 {
-	return math.Pi * math.Pow(c.radius, 2)
 }
 
 // A helper function to calculate the area of any Shape
@@ -32,5 +17,7 @@ func calculateArea(s Shape) float64 {
 
 func main() {
 
-	fmt.Println(calculateArea(Circle{radius: 10}))
+	fmt.Println(calculateArea(circle.Circle{Radius: 10}))
+
+	fmt.Println(calculateArea(square.Square{Side: 10}))
 }
