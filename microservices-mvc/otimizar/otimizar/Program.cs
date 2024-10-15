@@ -16,40 +16,28 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/processar-pedidos", (EntradaPedidos entrada) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-// Endpoint GET existente para previsão do tempo
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-// Novo endpoint POST para receber um JSON
-app.MapPost("/otimizar", (Item item) =>
-{
-    if (item == null)
+    if (entrada == null || entrada.Pedidos == null || !entrada.Pedidos.Any())
     {
-        return Results.BadRequest("------------------Dados inválidos.");
+        return Results.BadRequest("Entrada inválida ou vazia.");
     }
 
-    // Aqui você pode adicionar lógica de otimização ou processamento
-    return Results.Ok(new { mensagem = "------------------Dados recebidos com sucesso", item });
+    foreach (var pedido in entrada.Pedidos)
+    {
+        Console.WriteLine($"Processando Pedido ID: {pedido.PedidoId}");
+        foreach (var produto in pedido.Produtos)
+        {
+            Console.WriteLine($"Produto: {produto.ProdutoId}");
+            Console.WriteLine($"Dimensões - Altura: {produto.Dimensoes.Altura}, Largura: {produto.Dimensoes.Largura}, Comprimento: {produto.Dimensoes.Comprimento}");
+        }
+    }
+
+    return Results.Ok(new { mensagem = "Pedidos processados com sucesso", quantidadePedidos = entrada.Pedidos.Count });
 })
-.WithName("PostOtimizar")
+.WithName("PostProcessarPedidos")
 .WithOpenApi();
+
 
 app.Run();
 
@@ -59,9 +47,28 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-// Modelo de dados para o JSON
-public class Item
+
+
+public class Dimensoes
 {
-    public int Id { get; set; }
-    public string Nome { get; set; }
+    public int Altura { get; set; }
+    public int Largura { get; set; }
+    public int Comprimento { get; set; }
+}
+
+public class Produto
+{
+    public string ProdutoId { get; set; }
+    public Dimensoes Dimensoes { get; set; }
+}
+
+public class Pedido
+{
+    public int PedidoId { get; set; }
+    public List<Produto> Produtos { get; set; }
+}
+
+public class EntradaPedidos
+{
+    public List<Pedido> Pedidos { get; set; }
 }
