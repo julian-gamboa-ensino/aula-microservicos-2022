@@ -42,11 +42,11 @@ app.MapPost("/otimizar", (Item item) =>
 {
     if (item == null)
     {
-        return Results.BadRequest("Dados inválidos.");
+        return Results.BadRequest("------------------Dados inválidos.");
     }
 
     // Aqui você pode adicionar lógica de otimização ou processamento
-    return Results.Ok(new { mensagem = "Dados recebidos com sucesso", item });
+    return Results.Ok(new { mensagem = "------------------Dados recebidos com sucesso", item });
 })
 .WithName("PostOtimizar")
 .WithOpenApi();

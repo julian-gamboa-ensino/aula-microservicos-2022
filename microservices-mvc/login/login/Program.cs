@@ -1,13 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do Kestrel para usar a porta 5001
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5001); // Definindo a porta 5001 para o serviço login
-});
-
-
-
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
