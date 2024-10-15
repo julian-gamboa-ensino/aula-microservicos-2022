@@ -7,19 +7,18 @@ EXPOSE 5003
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["MyApi/MyApi.csproj", "MyApi/"]
-RUN dotnet restore "MyApi/MyApi.csproj"
+COPY ["otimizar/otimizar.csproj", "otimizar/"]
+RUN dotnet restore "otimizar/otimizar.csproj"
 COPY . .
-WORKDIR "/src/MyApi"
+WORKDIR "/src/otimizar"
 
-#RUN dotnet build "MyApi.csproj" -c Release -o /app/build
 
-RUN dotnet build "MyApi.csproj" -o /app/build
+RUN dotnet build "otimizar.csproj" -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MyApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "otimizar.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MyApi.dll"]
+ENTRYPOINT ["dotnet", "otimizar.dll"]
