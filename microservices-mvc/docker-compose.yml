@@ -1,14 +1,11 @@
-version: '3.8'
-
 services:
   login:
     image: login-service
     build:
       context: ./login
     ports:
-      - "5001:80"
-    networks:
-      - microservices-network
+      - "5001:80"  # Mapeia a porta 5001 do host para a 80 do contêiner
+    network_mode: host
 
   otimizar:
     image: otimizar-service
@@ -16,10 +13,7 @@ services:
       context: ./otimizar
     ports:
       - "5002:80"
-    networks:
-      - microservices-network
-    depends_on:
-      - login
+    network_mode: host
 
   notificacao:
     image: notificacao-service
@@ -27,13 +21,4 @@ services:
       context: ./notificacao
     ports:
       - "5003:80"
-    networks:
-      - microservices-network
-    depends_on:
-      - login
-      - otimizar
-
-networks:
-  microservices-network:
-    driver: bridge
-  
+    network_mode: host
