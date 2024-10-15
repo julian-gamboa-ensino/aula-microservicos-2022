@@ -21,6 +21,7 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
+// Endpoint GET existente para previsão do tempo
 app.MapGet("/weatherforecast", () =>
 {
     var forecast =  Enumerable.Range(1, 5).Select(index =>
@@ -36,9 +37,31 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+// Novo endpoint POST para receber um JSON
+app.MapPost("/otimizar", (Item item) =>
+{
+    if (item == null)
+    {
+        return Results.BadRequest("Dados inválidos.");
+    }
+
+    // Aqui você pode adicionar lógica de otimização ou processamento
+    return Results.Ok(new { mensagem = "Dados recebidos com sucesso", item });
+})
+.WithName("PostOtimizar")
+.WithOpenApi();
+
 app.Run();
 
+// Classe record existente para WeatherForecast
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+}
+
+// Modelo de dados para o JSON
+public class Item
+{
+    public int Id { get; set; }
+    public string Nome { get; set; }
 }
