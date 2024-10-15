@@ -9,6 +9,13 @@ https://en.wikipedia.org/wiki/Software_design_pattern
 https://en.wikipedia.org/wiki/Decorator_pattern
 
 
+docker run \
+  -p 9090:9090 \
+  -v ./volume-outubro-07/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus
+
+
+
     | Padrão de Projeto | Tipo | Descrição | Exemplo de Uso |
 |---|---|---|---|
 | **Abstract Factory** | Criação | Fornece uma interface para criar famílias de objetos relacionados ou dependentes sem especificar suas classes concretas. |  Um sistema que precisa criar diferentes tipos de documentos (HTML, PDF, etc.) pode usar uma Abstract Factory para fornecer as classes concretas de cada tipo de documento. |
