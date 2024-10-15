@@ -1,4 +1,4 @@
-//var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // Configuração do Kestrel para usar a porta 5001
 builder.WebHost.ConfigureKestrel(serverOptions =>
