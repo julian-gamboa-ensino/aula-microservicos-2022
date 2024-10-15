@@ -1,3 +1,20 @@
+
+
+
+
+
+
+
+
+
+
+
+docker-compose build
+
+
+
+
+
 Agora, com o contexto atualizado para o uso de Docker no desenvolvimento dos três microsserviços, o fluxo de trabalho seria assim:
 
 1. **Catálogo de Produtos:**
