@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  login:
+    image: login-service
+    build:
+      context: ./login
+    ports:
+      - "5001:80"
+    networks:
+      - microservices-network
+
+  otimizar:
+    image: otimizar-service
+    build:
+      context: ./otimizar
+    ports:
+      - "5002:80"
+    networks:
+      - microservices-network
+    depends_on:
+      - login
+
+  notificacao:
+    image: notificacao-service
+    build:
+      context: ./notificacao
+    ports:
+      - "5003:80"
+    networks:
+      - microservices-network
+    depends_on:
+      - login
+      - otimizar
+
+networks:
+  microservices-network:
+    driver: bridge
+  

@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  otimizar:
+    build: .
+    ports:
+      - "5225:5225"
+    network_mode: host

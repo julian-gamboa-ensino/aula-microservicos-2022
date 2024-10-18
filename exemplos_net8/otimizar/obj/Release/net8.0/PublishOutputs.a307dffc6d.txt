@@ -1,0 +1,12 @@
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/otimizar
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/appsettings.Development.json
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/appsettings.json
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/otimizar.dll
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/otimizar.deps.json
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/otimizar.runtimeconfig.json
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/otimizar.pdb
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/Microsoft.AspNetCore.OpenApi.dll
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/Microsoft.OpenApi.dll
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.Swagger.dll
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/julian/aprimorando/simples/otimizar/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerUI.dll
