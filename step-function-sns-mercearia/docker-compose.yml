@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"        # Porta para conexão de clientes
+      - "15672:15672"      # Porta para a interface de gerenciamento
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - mynetwork
+
+  microservicelogin:
+    build:
+      context: ./microserviceLogin
+      dockerfile: Dockerfile
+    container_name: login
+    ports:
+      - "5226:80"
+    environment:
+      - RABBITMQ_HOSTNAME=rabbitmq
+      - ASPNETCORE_HTTP_PORTS=80  # Substitua a porta 8080 pela porta 80
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+
+  microserviceotimizar:
+    build:
+      context: ./microserviceOtimizar
+      dockerfile: Dockerfile
+    container_name: otimizar
+    ports:
+      - "5225:80"
+    environment:
+      - RABBITMQ_HOSTNAME=rabbitmq
+      - ASPNETCORE_HTTP_PORTS=80  
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+
+
+  microservicenotificacao:
+    build:
+      context: ./microserviceNotificacao
+      dockerfile: Dockerfile
+    container_name: notificacao
+    ports:
+      - "5227:80"
+    environment:
+      - RABBITMQ_HOSTNAME=rabbitmq
+      - ASPNETCORE_HTTP_PORTS=80  # Substitua a porta 8080 pela porta 80
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

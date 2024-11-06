@@ -1,0 +1,6 @@
+@otimizar_HostAddress = http://localhost:5166
+
+GET {{otimizar_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
